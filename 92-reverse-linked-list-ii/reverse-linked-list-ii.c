@@ -22,7 +22,7 @@ struct ListNode* reverseBetween(struct ListNode* head, int left, int right) {
         s=c;
         i++;
     }
-    if (l != NULL) {
+    if (l) {
         l->next = s;
     } else {
         head = s;   // left = 1 → new head
