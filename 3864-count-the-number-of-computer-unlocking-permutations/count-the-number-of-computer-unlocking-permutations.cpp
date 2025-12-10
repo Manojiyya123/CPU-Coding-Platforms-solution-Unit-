@@ -1,6 +1,6 @@
 class Solution {
 public:
-     static const int N = 100000 + 10;
+     static const int N = 100010;
     static const int M = 1000000007;
     long long fact[N];
     Solution() {
