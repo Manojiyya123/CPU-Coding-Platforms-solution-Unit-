@@ -1,7 +1,10 @@
 class Solution {
 public:
+    bool issafe(int &i,int &j,int &r,int &c){
+        return(i<0||j<0||i>=r||j>=c);
+    }
     void dfs(vector<vector<char>>&g,int &r,int &c,int i,int j){
-        if(i<0||j<0||i>=r||j>=c||g[i][j]=='0') return;
+        if(issafe(i,j,r,c)||g[i][j]=='0') return;
         g[i][j]='0';
         dfs(g,r,c,i-1,j);
         dfs(g,r,c,i+1,j);
