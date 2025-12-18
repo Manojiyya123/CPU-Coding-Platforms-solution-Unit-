@@ -1,6 +1,6 @@
 class Solution {
 public:
-    bool issafe(int &i,int &j,int &r,int &c){
+    bool issafe(int i,int j,int &r,int &c){
         return(i<0||j<0||i>=r||j>=c);
     }
     void dfs(vector<vector<char>>&g,int &r,int &c,int i,int j){
