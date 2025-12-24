@@ -1,12 +1,9 @@
 int jump(int* nums, int ns) {
-    int x=ns-1;
-    int i=x,c=0;
-   while(i>0){
-        int j=i;
-        while(j--){
-            if(nums[j]>=i-j) x=j;
-        }
-       i=x;
+    int x=ns-1,c=0;
+   while(x>0){
+        int j=-1,l=x;
+        while(j++<x)
+            if(nums[j]>=l-j) x=j;
        c++;
     }
     return c;
