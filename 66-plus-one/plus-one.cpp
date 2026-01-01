@@ -14,9 +14,14 @@ public:
             }
         }
         if(t==0) return digits;
-        digits.push_back(1);
-        reverse(digits.begin(),digits.end()-1);
-        reverse(digits.begin(),digits.end());
+        digits.push_back(1);s++;
+        for(int i=0;i<s-1;i++){
+           int p=t;
+            t=digits[i+1];
+            digits[i+1]=digits[i];
+            digits[i]=p;
+        }
+        digits[s-1]=0;
         return digits;
     }
 };
