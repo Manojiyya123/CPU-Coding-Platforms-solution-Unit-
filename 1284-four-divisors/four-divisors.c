@@ -4,16 +4,13 @@ void divide(int n,int *s){
     int t=sqrt(n);
     for(int i=2;i<=t;i++){
         if(n%i==0){
-            int d=n/i;
-            if(d==i){
-                 m+=i;c++;
-            }
-            else{
-                m=m+i+d;
+                m=m+i+n/i;
                 c+=2;
             }
-        }
-        if(c>4) return;
+        if(c>5) return;
+    }
+    if(t*t==n){
+        c--;m-=t;
     }
     if(c==4) *s+=m;
 }
