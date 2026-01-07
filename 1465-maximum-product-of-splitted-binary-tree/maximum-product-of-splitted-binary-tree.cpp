@@ -35,16 +35,16 @@ public:
         while (!q.empty()) {
             TreeNode* t = q.front();
             q.pop();
-
+            long long e=0;
             if (t->left) {
                 q.push(t->left);
-                long long e = mp[t->left];
+                e = mp[t->left];
                 maxp = max(maxp, e * (tsum - e));
             }
-
+            e=0;
             if (t->right) {
                 q.push(t->right);
-                long long e = mp[t->right];
+                e = mp[t->right];
                 maxp = max(maxp, e * (tsum - e));
             }
         }
