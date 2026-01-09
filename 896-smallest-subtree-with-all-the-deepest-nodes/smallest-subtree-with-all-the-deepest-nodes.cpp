@@ -24,27 +24,7 @@ public:
         return m+1;
     }
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        if(root==NULL) return root;
         dfs(root,0);
-        /*queue <TreeNode*> q;
-        q.push(root);
-        TreeNode * deep=root;
-        while(!q.empty()){
-            int s=q.size()
-            TreeNode* t=q.front();
-            q.pop();
-            if(t->left){
-                q.push(t->left);
-                deep=t;
-            }
-            if(t->right){
-                q.push(t->right);
-                deep=t;
-            }
-        }
-        if(deep->left&&deep->right||!deep->left&&!deep->right);
-        else if(deep->left) deep=deep->left;
-        else deep=deep->right;*/
         return g;
     }
 };
