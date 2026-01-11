@@ -2,27 +2,22 @@ class Solution {
 public:
     int maximalRectangle(vector<vector<char>>& matrix) {
         int M = matrix.size();
+        if (M == 0) return 0;
         int N = matrix[0].size();
-        vector<vector<int>> mat(M, vector<int>(N));
+        vector<vector<int>> mat(M, vector<int>(N,0));
         for (int i = 0; i < M; i++) 
-            for (int j = 0; j < N; j++) {
-                mat[i][j] = matrix[i][j] - '0';
-                if (mat[i][j] == 1 && j > 0)
-                     mat[i][j] += mat[i][j - 1];
-            }
-        int Ans = 0;
-        for (int j = 0; j < N; j++) {
+            for (int j = 0; j < N; j++)
+                if (matrix[i][j] == '1')
+                    mat[i][j] = (j ? mat[i][j - 1] : 0) + 1;
+         int ans = 0;
+        for (int j = 0; j < N; j++)
             for (int i = 0; i < M; i++) {
-                int width = mat[i][j];
-                if (width == 0) continue;
-                int currWidth = width;
-                for (int k = i; k < M && mat[k][j] > 0; k++) {
-                    currWidth = min(currWidth, mat[k][j]);
-                    int height = k - i + 1;
-                    Ans = max(Ans, currWidth * height);
+                int w = mat[i][j];
+                for (int k = i; w && k < M; k++) {
+                    w = min(w, mat[k][j]);
+                    ans = max(ans, w * (k - i + 1));
                 }
-             }
-        }
-        return Ans;
+            }
+        return ans;
     }
 };
