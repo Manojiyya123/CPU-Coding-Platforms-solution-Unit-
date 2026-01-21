@@ -19,7 +19,7 @@ You can switch between branches using the branch selector on GitHub.
 
 ## 🛠 Languages Used
 - C / C++  
-- Python  
+- Java 
 - (More languages may be added as I practice)  
 
 ---
