@@ -1,0 +1,22 @@
+void listBooks() {
+    struct node *temp = head;
+
+    if (head == NULL) {
+        printf("No books in the library.\n");
+        return;
+    }
+
+    printf("List of books with their stock quantities:\n");
+
+    int count = 0;int c=0;
+  
+    // Traverse the list and display book titles and stock
+    while (temp != NULL) {
+        printf("%d. %s : %d\n", ++count, temp->title, temp->quantityInStock);
+        c=c+temp->quantityInStock;
+        temp = temp->next;
+    }
+
+    printf("\nTotal number of unique books: %d\n", count);
+    printf("Total number of books in the library: %d\n",c);
+}

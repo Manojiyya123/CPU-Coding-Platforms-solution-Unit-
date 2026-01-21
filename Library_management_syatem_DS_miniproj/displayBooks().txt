@@ -1,0 +1,35 @@
+void displayBooks() {
+    struct node *temp = head;
+
+    if (head == NULL) {
+        printf("No books in the library.\n");
+        return;
+    }
+
+    int bookCount = 0;
+    int totalStock = 0;
+
+    printf("Displaying books:\n");
+
+    // Display all book details
+    while (temp != NULL) {
+        printf("\nBook %d Details:\n", ++bookCount);
+        printf("Title: %s\n", temp->title);
+        printf("Author: %s\n", temp->author);
+        printf("Publication Year: %d\n", temp->publicationYear);
+        printf("Quantity in Stock: %d\n", temp->quantityInStock);
+        
+        totalStock += temp->quantityInStock;  // Add the quantity in stock of each book to total stock
+        
+        printf("Number of Pages: %d\n", temp->numberOfPages);
+        printf("Description: %s\n", temp->oneLine);
+        printf("Category: %s\n", temp->category);
+        printf("Shelf: %d\n", temp->shelf);
+        printf("Row: %d\n", temp->row);
+        
+        temp = temp->next;
+    }
+
+    printf("\nTotal number of unique books in the library: %d\n", bookCount);
+    printf("Total number of books in the library: %d\n", totalStock);
+}

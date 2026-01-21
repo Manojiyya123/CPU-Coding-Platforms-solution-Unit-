@@ -1,0 +1,83 @@
+void deleteBook() {
+    int choice;
+
+    printf("Do you want to:\n");
+    printf("1. Delete a specific book\n");
+    printf("2. Delete all books in the library\n");
+    printf("Enter your choice: ");
+    
+    while (scanf("%d", &choice) != 1 || (choice < 1 || choice > 2)) {
+        printf("Invalid choice. Please enter 1 or 2: ");
+        while (getchar() != '\n'); // clear buffer
+    }
+
+    switch (choice) {
+        case 1:
+            deleteSpecificBook();
+            break;
+        case 2:
+            deleteAllBooks();
+            break;
+        default:
+            printf("Invalid option selected.\n");
+            break;
+    }
+}
+
+void deleteAllBooks() {
+    struct node *temp = head;
+
+    // Traverse the list and free each node
+    while (temp != NULL) {
+        struct node *next = temp->next;
+        free(temp);
+        temp = next;
+    }
+
+    head = NULL;    // Reset the head pointer
+    current = NULL; // Reset the current pointer
+
+    printf("All books deleted successfully.\n");
+}
+
+void deleteSpecificBook() {
+    char book[100];
+    struct node *temp = head;
+
+    // Prompt user for book title
+    printf("Enter the book title to be deleted: ");
+    getchar(); // Clear leftover newline
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0; // Remove newline from input
+
+    // Search for the book
+    while (temp != NULL && strcmp(temp->title, book) != 0) {
+        temp = temp->next;
+    }
+
+    // If book is not found
+    if (temp == NULL) {
+        printf("Book not found\n");
+        return;
+    }
+
+    // Update pointers to unlink the node
+    if (temp->prev != NULL) {
+        temp->prev->next = temp->next;  // Link previous node to next node
+    } else {
+        head = temp->next;  // If deleting the head node, update head pointer
+    }
+
+    if (temp->next != NULL) {
+        temp->next->prev = temp->prev;  // Link next node to previous node
+    }
+
+    // Update the 'current' pointer if the last node is deleted
+    if (current == temp) {
+        current = temp->prev;
+    }
+
+    // Free the memory of the deleted node
+    free(temp);
+    printf("Book deleted successfully.\n");
+}

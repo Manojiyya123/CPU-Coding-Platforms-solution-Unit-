@@ -1,0 +1,26 @@
+struct node* exist(char *book) {
+    struct node *temp1 = head;
+
+    // Traverse the list to find the book
+    while (temp1 != NULL && strcmp(temp1->title, book) != 0) {
+        temp1 = temp1->next;
+    } 
+
+    if (temp1 != NULL) {
+        // Book found, print details and return the pointer
+        printf("\nBook Details:\n");
+        printf("Title: %s\n", temp1->title);
+        printf("Author: %s\n", temp1->author);
+        printf("Publication Year: %d\n", temp1->publicationYear);
+        printf("Quantity in Stock: %d\n", temp1->quantityInStock);
+        printf("Number of Pages: %d\n", temp1->numberOfPages);
+        printf("Description: %s\n", temp1->oneLine);
+        printf("Category: %s\n", temp1->category);
+        printf("Shelf: %d\n", temp1->shelf);
+        printf("Row: %d\n", temp1->row);
+        return temp1; // Return the node where the book is found
+    } else {
+        printf("Book not found\n");
+        return NULL; // Return NULL if the book doesn't exist
+    }
+}

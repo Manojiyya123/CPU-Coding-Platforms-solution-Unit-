@@ -1,0 +1,105 @@
+void insert() {
+    char book[100];
+    printf("Enter the book title to be inserted: ");
+    getchar(); // Clear newline from previous input
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0; // Remove newline from input
+
+    struct node *existingBook = exist(book); // Check if the book already exists
+
+    if (existingBook != NULL) {
+        // Book exists, prompt user to increase quantity or add a new entry
+        int choice;
+        printf("The book already exists. Do you want to:\n");
+        printf("1. Increase the quantity of this book\n");
+        printf("2. Add a new entry with this title\n");
+        printf("Enter your choice (1 or 2): ");
+        
+        while (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
+            printf("Invalid input. Please enter 1 or 2: ");
+            while(getchar() != '\n'); // clear buffer
+        }
+
+        if (choice == 1) {
+            // Increase quantity of existing book
+            int additionalQuantity;
+            printf("Enter the quantity to add to the existing stock: ");
+            while (scanf("%d", &additionalQuantity) != 1 || additionalQuantity < 0) {
+                printf("Invalid input. Please enter a valid quantity: ");
+                while(getchar() != '\n'); // clear buffer
+            }
+            
+            existingBook->quantityInStock += additionalQuantity;
+            printf("Updated quantity in stock: %d\n", existingBook->quantityInStock);
+            return; // Exit insert function after updating quantity
+
+        } else if (choice == 2) {
+            printf("Adding a new entry for the title.\n");
+        }
+    }
+    
+    // Code to insert a new book entry if it doesn't already exist
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+
+    // Get the new book details
+    strcpy(newnode->title, book);
+    printf("Enter the author name: ");
+    fgets(newnode->author, sizeof(newnode->author), stdin);
+    newnode->author[strcspn(newnode->author, "\n")] = 0;
+
+    printf("Enter the publication year: ");
+    while (scanf("%d", &newnode->publicationYear) != 1) {
+        printf("Invalid input. Please enter a valid year: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    printf("Enter the quantity in stock: ");
+    while (scanf("%d", &newnode->quantityInStock) != 1) {
+        printf("Invalid input. Please enter a valid quantity: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    printf("Enter the number of pages: ");
+    while (scanf("%d", &newnode->numberOfPages) != 1) {
+        printf("Invalid input. Please enter a valid number of pages: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    getchar(); // Clear the newline after entering pages
+    printf("Enter one line or description from the book: ");
+    fgets(newnode->oneLine, sizeof(newnode->oneLine), stdin);
+    newnode->oneLine[strcspn(newnode->oneLine, "\n")] = 0;
+
+    printf("Enter the category (e.g., Fiction, Science): ");
+    fgets(newnode->category, sizeof(newnode->category), stdin);
+    newnode->category[strcspn(newnode->category, "\n")] = 0;
+
+    printf("Enter the shelf number: ");
+    while (scanf("%d", &newnode->shelf) != 1) {
+        printf("Invalid input. Please enter a valid shelf number: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    printf("Enter the row number: ");
+    while (scanf("%d", &newnode->row) != 1) {
+        printf("Invalid input. Please enter a valid row number: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    // Link the new node to the list
+    newnode->prev = NULL;
+    newnode->next = NULL;
+
+    if (head == NULL) {
+        head = newnode;
+    } else {
+        current->next = newnode;
+        newnode->prev = current;
+    }
+    current = newnode;
+    printf("Inserted Successfully\n");
+}

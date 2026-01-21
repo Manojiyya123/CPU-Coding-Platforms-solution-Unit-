@@ -1,0 +1,154 @@
+void editBook() {
+    char book[100];
+    struct node *temp = head;
+    printf("Enter the book title to edit: ");
+    getchar(); // Clear leftover newline
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0;
+
+    while (temp != NULL && strcmp(temp->title, book) != 0) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Book not found\n");
+        return;
+    }
+
+    int choice;
+    printf("Do you want to:\n1. Edit all details\n2. Edit specific details\n");
+    printf("Enter your choice: ");
+    while (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
+        printf("Invalid choice. Please enter 1 or 2: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    getchar(); // clear buffer for next input
+
+    if (choice == 1) {
+        // Edit all details
+        char buffer[200];
+
+        printf("New title (current: %s): ", temp->title);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->title, buffer);
+
+        printf("New author (current: %s): ", temp->author);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->author, buffer);
+
+        printf("New publication year (current: %d): ", temp->publicationYear);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->publicationYear = atoi(buffer);
+
+        printf("New quantity in stock (current: %d): ", temp->quantityInStock);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->quantityInStock = atoi(buffer);
+
+        printf("New number of pages (current: %d): ", temp->numberOfPages);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->numberOfPages = atoi(buffer);
+
+        printf("New description (current: %s): ", temp->oneLine);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->oneLine, buffer);
+
+        printf("New category (current: %s): ", temp->category);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->category, buffer);
+
+        printf("New shelf number (current: %d): ", temp->shelf);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->shelf = atoi(buffer);
+
+        printf("New row number (current: %d): ", temp->row);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->row = atoi(buffer);
+
+        printf("Book details updated successfully.\n");
+
+    } else if (choice == 2) {
+        // Edit specific details with an exit option
+        int detailChoice;
+        char buffer[200];
+        while (1) {
+            printf("\nSelect which detail to edit (or enter 0 to exit):\n");
+            printf("1. Title\n");
+            printf("2. Author\n");
+            printf("3. Publication Year\n");
+            printf("4. Quantity in Stock\n");
+            printf("5. Number of Pages\n");
+            printf("6. Description\n");
+            printf("7. Category\n");
+            printf("8. Shelf\n");
+            printf("9. Row\n");
+            printf("0. Exit\n");
+            printf("Enter your choice: ");
+            scanf("%d", &detailChoice);
+
+            getchar(); // Clear buffer for new input
+
+            switch (detailChoice) {
+                case 1:
+                    printf("New title (current: %s): ", temp->title);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->title, buffer);
+                    break;
+                case 2:
+                    printf("New author (current: %s): ", temp->author);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->author, buffer);
+                    break;
+                case 3:
+                    printf("New publication year (current: %d): ", temp->publicationYear);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->publicationYear = atoi(buffer);
+                    break;
+                case 4:
+                    printf("New quantity in stock (current: %d): ", temp->quantityInStock);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->quantityInStock = atoi(buffer);
+                    break;
+                case 5:
+                    printf("New number of pages (current: %d): ", temp->numberOfPages);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->numberOfPages = atoi(buffer);
+                    break;
+                case 6:
+                    printf("New description (current: %s): ", temp->oneLine);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->oneLine, buffer);
+                    break;
+                case 7:
+                    printf("New category (current: %s): ", temp->category);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->category, buffer);
+                    break;
+                case 8:
+                    printf("New shelf number (current: %d): ", temp->shelf);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->shelf = atoi(buffer);
+                    break;
+                case 9:
+                    printf("New row number (current: %d): ", temp->row);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->row = atoi(buffer);
+                    break;
+                case 0:
+                    printf("Exiting edit mode.\n");
+                    return;
+                default:
+                    printf("Invalid choice. Please try again.\n");
+                    break;
+            }
+        }
+    }
+}

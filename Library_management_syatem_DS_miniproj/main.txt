@@ -1,0 +1,548 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define the structure for a book node
+struct node {
+    char title[100];
+    char author[100];
+    int publicationYear;
+    int quantityInStock;
+    int numberOfPages;
+    char oneLine[200];
+    char category[50];
+    int shelf;
+    int row;
+    struct node *next;
+    struct node *prev;
+};
+
+// Global head and current pointers
+struct node *head = NULL;
+struct node *current = NULL;
+
+// Function declarations
+void insert();
+void search();
+void deleteBook();
+void editBook();
+struct node* exist(char *book); // Corrected declaration
+void displayBooks();
+void listBooks();
+void deleteSpecificBook(); // Added declaration
+void deleteAllBooks();
+
+
+
+void insert() {
+    char book[100];
+    printf("Enter the book title to be inserted: ");
+    getchar(); // Clear newline from previous input
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0; // Remove newline from input
+
+    struct node *existingBook = exist(book); // Check if the book already exists
+
+    if (existingBook != NULL) {
+        // Book exists, prompt user to increase quantity or add a new entry
+        int choice;
+        printf("The book already exists. Do you want to:\n");
+        printf("1. Increase the quantity of this book\n");
+        printf("2. Add a new entry with this title\n");
+        printf("Enter your choice (1 or 2): ");
+        
+        while (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
+            printf("Invalid input. Please enter 1 or 2: ");
+            while(getchar() != '\n'); // clear buffer
+        }
+
+        if (choice == 1) {
+            // Increase quantity of existing book
+            int additionalQuantity;
+            printf("Enter the quantity to add to the existing stock: ");
+            while (scanf("%d", &additionalQuantity) != 1 || additionalQuantity < 0) {
+                printf("Invalid input. Please enter a valid quantity: ");
+                while(getchar() != '\n'); // clear buffer
+            }
+            
+            existingBook->quantityInStock += additionalQuantity;
+            printf("Updated quantity in stock: %d\n", existingBook->quantityInStock);
+            return; // Exit insert function after updating quantity
+
+        } else if (choice == 2) {
+            printf("Adding a new entry for the title.\n");
+        }
+    }
+    
+    // Code to insert a new book entry if it doesn't already exist
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+
+    // Get the new book details
+    strcpy(newnode->title, book);
+    printf("Enter the author name: ");
+    fgets(newnode->author, sizeof(newnode->author), stdin);
+    newnode->author[strcspn(newnode->author, "\n")] = 0;
+
+    printf("Enter the publication year: ");
+    while (scanf("%d", &newnode->publicationYear) != 1) {
+        printf("Invalid input. Please enter a valid year: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    printf("Enter the quantity in stock: ");
+    while (scanf("%d", &newnode->quantityInStock) != 1) {
+        printf("Invalid input. Please enter a valid quantity: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    printf("Enter the number of pages: ");
+    while (scanf("%d", &newnode->numberOfPages) != 1) {
+        printf("Invalid input. Please enter a valid number of pages: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    getchar(); // Clear the newline after entering pages
+    printf("Enter one line or description from the book: ");
+    fgets(newnode->oneLine, sizeof(newnode->oneLine), stdin);
+    newnode->oneLine[strcspn(newnode->oneLine, "\n")] = 0;
+
+    printf("Enter the category (e.g., Fiction, Science): ");
+    fgets(newnode->category, sizeof(newnode->category), stdin);
+    newnode->category[strcspn(newnode->category, "\n")] = 0;
+
+    printf("Enter the shelf number: ");
+    while (scanf("%d", &newnode->shelf) != 1) {
+        printf("Invalid input. Please enter a valid shelf number: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    printf("Enter the row number: ");
+    while (scanf("%d", &newnode->row) != 1) {
+        printf("Invalid input. Please enter a valid row number: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    // Link the new node to the list
+    newnode->prev = NULL;
+    newnode->next = NULL;
+
+    if (head == NULL) {
+        head = newnode;
+    } else {
+        current->next = newnode;
+        newnode->prev = current;
+    }
+    current = newnode;
+    printf("Inserted Successfully\n");
+}
+struct node* exist(char *book) {
+    struct node *temp1 = head;
+
+    // Traverse the list to find the book
+    while (temp1 != NULL && strcmp(temp1->title, book) != 0) {
+        temp1 = temp1->next;
+    } 
+
+    if (temp1 != NULL) {
+        // Book found, print details and return the pointer
+        printf("\nBook Details:\n");
+        printf("Title: %s\n", temp1->title);
+        printf("Author: %s\n", temp1->author);
+        printf("Publication Year: %d\n", temp1->publicationYear);
+        printf("Quantity in Stock: %d\n", temp1->quantityInStock);
+        printf("Number of Pages: %d\n", temp1->numberOfPages);
+        printf("Description: %s\n", temp1->oneLine);
+        printf("Category: %s\n", temp1->category);
+        printf("Shelf: %d\n", temp1->shelf);
+        printf("Row: %d\n", temp1->row);
+        return temp1; // Return the node where the book is found
+    } else {
+        return NULL; // Return NULL if the book doesn't exist
+    }
+}
+
+void search() {
+    char book[100];
+    struct node *temp1 = head;
+    printf("Enter the book title to be found: ");
+    getchar(); // Clear leftover newline
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0;
+
+    while (temp1 != NULL && strcmp(temp1->title, book) != 0) {
+        temp1 = temp1->next;
+    }
+
+    if (temp1 != NULL) {
+        printf("\nBook Details:\n");
+        printf("Title: %s\n", temp1->title);
+        printf("Author: %s\n", temp1->author);
+        printf("Publication Year: %d\n", temp1->publicationYear);
+        printf("Quantity in Stock: %d\n", temp1->quantityInStock);
+        printf("Number of Pages: %d\n", temp1->numberOfPages);
+        printf("Description: %s\n", temp1->oneLine);
+        printf("Category: %s\n", temp1->category);
+        printf("Shelf: %d\n", temp1->shelf);
+        printf("Row: %d\n", temp1->row);
+    } else {
+        printf("Book not found\n");
+    }
+}
+void deleteBook() {
+    int choice;
+
+    printf("Do you want to:\n");
+    printf("1. Delete a specific book\n");
+    printf("2. Delete all books in the library\n");
+    printf("Enter your choice: ");
+    
+    while (scanf("%d", &choice) != 1 || (choice < 1 || choice > 2)) {
+        printf("Invalid choice. Please enter 1 or 2: ");
+        while (getchar() != '\n'); // clear buffer
+    }
+
+    switch (choice) {
+        case 1:
+            deleteSpecificBook();
+            break;
+        case 2:
+            deleteAllBooks();
+            break;
+        default:
+            printf("Invalid option selected.\n");
+            break;
+    }
+}
+
+void deleteAllBooks() {
+    struct node *temp = head;
+
+    // Traverse the list and free each node
+    while (temp != NULL) {
+        struct node *next = temp->next;
+        free(temp);
+        temp = next;
+    }
+
+    head = NULL;    // Reset the head pointer
+    current = NULL; // Reset the current pointer
+
+    printf("All books deleted successfully.\n");
+}
+
+void deleteSpecificBook() {
+    char book[100];
+    struct node *temp = head;
+
+    // Prompt user for book title
+    printf("Enter the book title to be deleted: ");
+    getchar(); // Clear leftover newline
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0; // Remove newline from input
+
+    // Search for the book
+    while (temp != NULL && strcmp(temp->title, book) != 0) {
+        temp = temp->next;
+    }
+
+    // If book is not found
+    if (temp == NULL) {
+        printf("Book not found\n");
+        return;
+    }
+
+    // Update pointers to unlink the node
+    if (temp->prev != NULL) {
+        temp->prev->next = temp->next;  // Link previous node to next node
+    } else {
+        head = temp->next;  // If deleting the head node, update head pointer
+    }
+
+    if (temp->next != NULL) {
+        temp->next->prev = temp->prev;  // Link next node to previous node
+    }
+
+    // Update the 'current' pointer if the last node is deleted
+    if (current == temp) {
+        current = temp->prev;
+    }
+
+    // Free the memory of the deleted node
+    free(temp);
+    printf("Book deleted successfully.\n");
+}
+void editBook() {
+    char book[100];
+    struct node *temp = head;
+    printf("Enter the book title to edit: ");
+    getchar(); // Clear leftover newline
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0;
+
+    while (temp != NULL && strcmp(temp->title, book) != 0) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Book not found\n");
+        return;
+    }
+
+    int choice;
+    printf("Do you want to:\n1. Edit all details\n2. Edit specific details\n");
+    printf("Enter your choice: ");
+    while (scanf("%d", &choice) != 1 || (choice != 1 && choice != 2)) {
+        printf("Invalid choice. Please enter 1 or 2: ");
+        while(getchar() != '\n'); // clear buffer
+    }
+
+    getchar(); // clear buffer for next input
+
+    if (choice == 1) {
+        // Edit all details
+        char buffer[200];
+
+        printf("New title (current: %s): ", temp->title);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->title, buffer);
+
+        printf("New author (current: %s): ", temp->author);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->author, buffer);
+
+        printf("New publication year (current: %d): ", temp->publicationYear);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->publicationYear = atoi(buffer);
+
+        printf("New quantity in stock (current: %d): ", temp->quantityInStock);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->quantityInStock = atoi(buffer);
+
+        printf("New number of pages (current: %d): ", temp->numberOfPages);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->numberOfPages = atoi(buffer);
+
+        printf("New description (current: %s): ", temp->oneLine);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->oneLine, buffer);
+
+        printf("New category (current: %s): ", temp->category);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = 0;
+        if (strlen(buffer) > 0) strcpy(temp->category, buffer);
+
+        printf("New shelf number (current: %d): ", temp->shelf);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->shelf = atoi(buffer);
+
+        printf("New row number (current: %d): ", temp->row);
+        fgets(buffer, sizeof(buffer), stdin);
+        if (strlen(buffer) > 0) temp->row = atoi(buffer);
+
+        printf("Book details updated successfully.\n");
+
+    } else if (choice == 2) {
+        // Edit specific details with an exit option
+        int detailChoice;
+        char buffer[200];
+        while (1) {
+            printf("\nSelect which detail to edit (or enter 0 to exit):\n");
+            printf("1. Title\n");
+            printf("2. Author\n");
+            printf("3. Publication Year\n");
+            printf("4. Quantity in Stock\n");
+            printf("5. Number of Pages\n");
+            printf("6. Description\n");
+            printf("7. Category\n");
+            printf("8. Shelf\n");
+            printf("9. Row\n");
+            printf("0. Exit\n");
+            printf("Enter your choice: ");
+            scanf("%d", &detailChoice);
+
+            getchar(); // Clear buffer for new input
+
+            switch (detailChoice) {
+                case 1:
+                    printf("New title (current: %s): ", temp->title);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->title, buffer);
+                    break;
+                case 2:
+                    printf("New author (current: %s): ", temp->author);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->author, buffer);
+                    break;
+                case 3:
+                    printf("New publication year (current: %d): ", temp->publicationYear);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->publicationYear = atoi(buffer);
+                    break;
+                case 4:
+                    printf("New quantity in stock (current: %d): ", temp->quantityInStock);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->quantityInStock = atoi(buffer);
+                    break;
+                case 5:
+                    printf("New number of pages (current: %d): ", temp->numberOfPages);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->numberOfPages = atoi(buffer);
+                    break;
+                case 6:
+                    printf("New description (current: %s): ", temp->oneLine);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->oneLine, buffer);
+                    break;
+                case 7:
+                    printf("New category (current: %s): ", temp->category);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    buffer[strcspn(buffer, "\n")] = 0;
+                    if (strlen(buffer) > 0) strcpy(temp->category, buffer);
+                    break;
+                case 8:
+                    printf("New shelf number (current: %d): ", temp->shelf);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->shelf = atoi(buffer);
+                    break;
+                case 9:
+                    printf("New row number (current: %d): ", temp->row);
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (strlen(buffer) > 0) temp->row = atoi(buffer);
+                    break;
+                case 0:
+                    printf("Exiting edit mode.\n");
+                    return;
+                default:
+                    printf("Invalid choice. Please try again.\n");
+                    break;
+            }
+        }
+    }
+}
+void displayBooks() {
+    struct node *temp = head;
+
+    if (head == NULL) {
+        printf("No books in the library.\n");
+        return;
+    }
+
+    int bookCount = 0;
+    int totalStock = 0;
+
+    printf("Displaying books:\n");
+
+    // Display all book details
+    while (temp != NULL) {
+        printf("\nBook %d Details:\n", ++bookCount);
+        printf("Title: %s\n", temp->title);
+        printf("Author: %s\n", temp->author);
+        printf("Publication Year: %d\n", temp->publicationYear);
+        printf("Quantity in Stock: %d\n", temp->quantityInStock);
+        
+        totalStock += temp->quantityInStock;  // Add the quantity in stock of each book to total stock
+        
+        printf("Number of Pages: %d\n", temp->numberOfPages);
+        printf("Description: %s\n", temp->oneLine);
+        printf("Category: %s\n", temp->category);
+        printf("Shelf: %d\n", temp->shelf);
+        printf("Row: %d\n", temp->row);
+        
+        temp = temp->next;
+    }
+
+    printf("\nTotal number of unique books in the library: %d\n", bookCount);
+    printf("Total number of books in the library: %d\n", totalStock);
+}
+void listBooks() {
+    
+    struct node *temp = head;
+
+    if (head == NULL) {
+        printf("No books in the library.\n");
+        return;
+    }
+
+    printf("List of books with their stock quantities:\n");
+
+    int count = 0;int c=0;
+  
+    // Traverse the list and display book titles and stock
+    while (temp != NULL) {
+        printf("%d. %s : %d\n", ++count, temp->title, temp->quantityInStock);
+        c=c+temp->quantityInStock;
+        temp = temp->next;
+    }
+
+    printf("\nTotal number of unique books: %d\n", count);
+    printf("Total number of books in the library: %d\n",c);
+}
+
+int main() {
+    int choice;
+
+    printf("\n=====================================\n");
+    printf("    Welcome to the NEWFACE Library\n");
+    printf("=====================================\n");
+
+    while (1) {
+         printf("--------------------------\n");
+        printf("\nLibrary Management System\n");
+        printf("--------------------------\n");
+        printf("1. Insert a new book\n");
+        printf("2. Search for a book\n");
+        printf("3. Delete a book\n");
+        printf("4. Edit a book\n");
+        printf("5. Display all books (detailed view)\n");
+        printf("6. List all book titles and stock quantities\n");
+        printf("7. Exit\n");
+        printf("--------------------------\n");
+        printf("Enter your choice: ");
+        
+        
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number between 1 and 7.\n");
+            while (getchar() != '\n'); // Clear the input buffer
+            continue;
+        }
+
+        switch (choice) {
+            case 1:
+                insert();
+                break;
+            case 2:
+                search();
+                break;
+            case 3:
+                deleteBook();
+                break;
+            case 4:
+                editBook();
+                break;
+            case 5:
+                displayBooks(); // Show all book details
+                break;
+            case 6:
+                listBooks(); // Show book titles and stock quantities
+                break;
+            case 7:
+                printf("\nThank you for using the NEWFACE Library Management System.\n");
+                printf("Goodbye!\n");
+                exit(0);
+            default:
+                printf("Invalid choice. Please enter a number between 1 and 7.\n");
+        }
+    }
+
+    return 0;
+}

@@ -1,0 +1,27 @@
+void search() {
+    char book[100];
+    struct node *temp1 = head;
+    printf("Enter the book title to be found: ");
+    getchar(); // Clear leftover newline
+    fgets(book, sizeof(book), stdin);
+    book[strcspn(book, "\n")] = 0;
+
+    while (temp1 != NULL && strcmp(temp1->title, book) != 0) {
+        temp1 = temp1->next;
+    }
+
+    if (temp1 != NULL) {
+        printf("\nBook Details:\n");
+        printf("Title: %s\n", temp1->title);
+        printf("Author: %s\n", temp1->author);
+        printf("Publication Year: %d\n", temp1->publicationYear);
+        printf("Quantity in Stock: %d\n", temp1->quantityInStock);
+        printf("Number of Pages: %d\n", temp1->numberOfPages);
+        printf("Description: %s\n", temp1->oneLine);
+        printf("Category: %s\n", temp1->category);
+        printf("Shelf: %d\n", temp1->shelf);
+        printf("Row: %d\n", temp1->row);
+    } else {
+        printf("Book not found\n");
+    }
+}
