@@ -6,12 +6,11 @@ public:
         for(int i = 1; i < n; i++) {
             if(s[i] == s[i-1]) c++;
             else {
-                r += min(p, c);
                 p = c;
                 c = 1;
             }
+            if(c <= p) r++;
         }
-        r += min(p, c);
         return r;
     }
 };
