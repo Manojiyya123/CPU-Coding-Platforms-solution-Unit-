@@ -8,7 +8,7 @@ public:
         vector<vector<int>> a;
         a.push_back(in[0]);
         for (int i = 1; i < in.size(); i++) {
-            vector<int>& last = a.back();
+            vector<int>&last = a.back();
             if (in[i][0] <= last[1]) {
                 last[1] = max(last[1], in[i][1]);
             } else {
