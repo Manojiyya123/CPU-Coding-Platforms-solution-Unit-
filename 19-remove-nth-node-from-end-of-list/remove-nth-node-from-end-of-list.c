@@ -24,3 +24,4 @@ struct ListNode* removeNthFromEnd(struct ListNode* head, int n) {
 
     return head;
 }
+//f : firstnode /s : secondnode /p :previous node
